@@ -1,0 +1,19 @@
+<div class="box" style="border-left: 5px solid #03dac6;">
+        <h3>0. Pegue seu RG do PC</h3>
+        <p>Copie o código abaixo, salve como <b>Scanner.bat</b> e execute para gerar os dados do seu hardware.</p>
+        <button onclick="copiarCodigo('codigoScanner')" style="background: #03dac6; color: #000;">Copiar Código do Scanner</button>
+        <code id="codigoScanner">@echo off
+title REVELI-OS - Scanner de Hardware
+echo Escaneando... Gerando seu Meu_PC_REVELIOS.txt
+set "out=Meu_PC_REVELIOS.txt"
+echo [SISTEMA] > %out%
+wmic os get Caption /value | find "=" >> %out%
+echo [PROCESSADOR] >> %out%
+wmic cpu get Name /value | find "=" >> %out%
+echo [GPU] >> %out%
+wmic path win32_VideoController get Name /value | find "=" >> %out%
+echo [RAM] >> %out%
+wmic computersystem get TotalPhysicalMemory /value | find "=" >> %output%
+echo Scan concluido! Copie o conteudo do arquivo %out% e cole abaixo.
+pause</code>
+    </div>
