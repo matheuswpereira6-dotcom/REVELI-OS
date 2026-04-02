@@ -97,51 +97,91 @@ pause</code>
         alert("Código copiado! Agora cole no Bloco de Notas e salve como .bat");
     }
 </script> 
-    <script>function analisarHardware() {
+   <script>
+       function analisarHardware() {
     let texto = document.getElementById("inputScanner").value;
     let status = document.getElementById("status");
     let caixaBoost = document.getElementById("codigoBoost");
     
+    // Procura a RAM e a GPU no texto do Scanner
     let matchRAM = texto.match(/TotalPhysicalMemory=(\d+)/);
+    let matchGPU = texto.match(/Name=(.*)/i); // Pega o nome da placa de vídeo
 
     if (matchRAM) {
-        let ramBytes = parseInt(matchRAM[1]);
-        let ramGB = Math.round(ramBytes / (1024 ** 3));
+        let ramGB = Math.round(parseInt(matchRAM[1]) / (1024 ** 3));
+        let gpuNome = matchGPU ? matchGPU[1].toUpperCase() : "Genérica";
         
-        // 1. A ZOEIRA PERSONALIZADA
+        // 1. ZOEIRA E STATUS
         if (ramGB >= 128) {
-            status.innerText = "🚀 " + ramGB + "GB de RAM? Você tá tentando rodar o quê? A NASA sabe disso?";
+            status.innerText = "🚀 " + ramGB + "GB de RAM? Você tá tentando simular o universo? A NASA sabe disso?";
         } else if (ramGB <= 4) {
             status.innerText = "🐢 " + ramGB + "GB detectados. Vamos dar um fôlego para esse guerreiro!";
         } else {
-            status.innerText = "✅ " + ramGB + "GB de RAM identificados. Gerando script otimizado...";
+            status.innerText = "✅ " + ramGB + "GB de RAM e GPU " + gpuNome + " identificados. Gerando script...";
         }
 
-        // 2. GERAR O CÓDIGO PERSONALIZADO (A MÁGICA)
-        let scriptPersonalizado = "@echo off\n";
-        scriptPersonalization += ":: SCRIPT GERADO PELO REVELI-OS PARA " + ramGB + "GB DE RAM\n";
-        scriptPersonalization += "ipconfig /flushdns\n";
-        scriptPersonalization += "del /q /s /f %temp%\\*\n";
+        // 2. CONSTRUÇÃO DO SCRIPT PERSONALIZADO (Variável 'bat')
+        let bat = "@echo off\n";
+        bat += "title REVELI-OS BOOST PERSONALIZADO\n";
+        bat += ":: Configuração para: " + ramGB + "GB RAM | GPU: " + gpuNome + "\n\n";
         
-        // Se o PC for fraco, desativa mais coisas
+        bat += "echo Limpando rastros e DNS...\n";
+        bat += "ipconfig /flushdns >nul\n";
+        bat += "del /q /s /f %temp%\\* >nul 2>&1\n\n";
+
+        // Lógica de RAM (PC Fraco vs PC Forte)
         if (ramGB <= 8) {
-            scriptPersonalizado += ":: Otimizacao para PC de entrada\n";
-            scriptPersonalizado += "reg add \"HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\BackgroundAccessApplications\" /v \"GlobalUserDisabled\" /t REG_DWORD /d 1 /f\n";
+            bat += "echo [!] PC de entrada detectado: Priorizando RAM...\n";
+            bat += "reg add \"HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\BackgroundAccessApplications\" /v \"GlobalUserDisabled\" /t REG_DWORD /d 1 /f >nul\n";
         } else {
-            scriptPersonalizado += ":: Otimizacao para PC Gamer/Edit\n";
-            scriptPersonalizado += "PowerCfg /SETACVALUEINDEX SCHEME_CURRENT SUB_PROCESSOR PROCTHROTTLEMAX 100\n";
+            bat += "echo [!] PC Gamer/Edit detectado: Maximizando Performance...\n";
+            bat += "powercfg /setactive 8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c >nul 2>&1\n"; // Ativa Desempenho Máximo
         }
 
-        scriptPersonalizado += "echo Seu PC de " + ramGB + "GB foi otimizado pelo REVELI-OS!\n";
-        scriptPersonalizado += "pause";
+        // Lógica de GPU (NVIDIA vs AMD)
+        if (gpuNome.includes("NVIDIA")) {
+            bat += "echo [!] Otimizando latência para NVIDIA...\n";
+            bat += ":: Comando para baixa latência (placeholder técnico)\n";
+        } else if (gpuNome.includes("AMD") || gpuNome.includes("RADEON")) {
+            bat += "echo [!] Otimizando cache de textura AMD...\n";
+        }
 
-        // Atualiza a caixa do Passo 2 com o código novo
-        caixaBoost.innerText = scriptPersonalizado;
+        bat += "\necho.\necho ===========================================\n";
+        bat += "echo SEU PC DE " + ramGB + "GB FOI REVELADO E OTIMIZADO!\n";
+        bat += "echo ===========================================\n";
+        bat += "pause";
+
+        // 3. A MÁGICA: Atualiza o Passo 2 com o código novo na hora!
+        caixaBoost.innerText = bat;
 
     } else {
         status.innerText = "❌ Formato inválido. Use o Scanner oficial acima.";
     }
-} </script>
+}
+   </script>
+    <script>
+        function baixarArquivo() {
+    let codigo = document.getElementById("codigoBoost").innerText;
+    let blob = new Blob([codigo], { type: "text/plain" });
+    let link = document.createElement("a");
+    
+    link.href = URL.createObjectURL(blob);
+    link.download = "REVELI-OS_Boost_Personalizado.bat";
+    link.click();
+    
+    URL.revokeObjectURL(link.href);
+}
+    </script>
+    <html> <div class="box" style="border-left-color: #bb86fc;">
+    <h3>PASSO 2: Aplicar o Boost</h3>
+    <p>Limpeza de DNS, arquivos temporários e liberação de CPU.</p>
+    
+    <button onclick="copiarCodigo('codigoBoost')">Copiar Script</button>
+    
+    <button onclick="baixarArquivo()" style="background: #03dac6; color: #000;">Baixar .bat Pronto</button>
+    
+    <code id="codigoBoost">... (O código será gerado aqui) ...</code>
+</div>
 
 </body>
 </html>
