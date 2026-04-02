@@ -22,17 +22,32 @@
     <h1>REVELI-OS</h1>
     <p>Onde a mágica roda em comandos (e sem anúncios falsos).</p>
 
-    <div class="box">
-        <h3>1. Identifique seu Hardware</h3>
-        <p>Cole aqui o conteúdo do arquivo <b>Meu_PC_REVELIOS.txt</b> gerado pelo Scanner:</p>
-        <textarea id="inputScanner" placeholder="TotalPhysicalMemory=..."></textarea>
-        <button onclick="analisarHardware()">Analisar Hardware</button>
-        <div id="status" class="status-msg"></div>
+    <div class="box" style="border-left-color: #03dac6;">
+        <h3>PASSO 0: Pegue seu "RG do PC"</h3>
+        <p>Copie o código abaixo, salve como <b>Scanner.bat</b> no Bloco de Notas e execute como Administrador.</p>
+        <button onclick="copiarCodigo('codigoScanner')" style="background: #03dac6; color: #000;">Copiar Código do Scanner</button>
+        <code id="codigoScanner">@echo off
+title REVELI-OS Scanner
+echo Escaneando... Aguarde.
+set "out=Meu_PC_REVELIOS.txt"
+wmic computersystem get TotalPhysicalMemory /value > %out%
+wmic cpu get Name /value >> %out%
+wmic path win32_VideoController get Name /value >> %out%
+echo Scan concluido! O arquivo %out% foi criado.
+pause</code>
     </div>
 
     <div class="box">
-        <h3>2. Kit de Performance (Boost)</h3>
-        <p>Limpa DNS, arquivos temporários e desativa apps inúteis em 2º plano.</p>
+        <h3>PASSO 1: Analisar e Revelar</h3>
+        <p>Abra o arquivo <b>Meu_PC_REVELIOS.txt</b>, copie tudo e cole aqui:</p>
+        <textarea id="inputScanner" placeholder="TotalPhysicalMemory=..."></textarea>
+        <button onclick="analisarHardware()">Analisar Máquina</button>
+        <div id="status" class="status-msg"></div>
+    </div>
+
+    <div class="box" style="border-left-color: #bb86fc;">
+        <h3>PASSO 2: Aplicar o Boost</h3>
+        <p>Limpeza de DNS, arquivos temporários e liberação de CPU.</p>
         <button onclick="copiarCodigo('codigoBoost')">Copiar Script de Boost</button>
         <code id="codigoBoost">@echo off
 :: REVELI-OS BOOST
@@ -43,8 +58,8 @@ echo Otimizado pelo REVELI-OS!
 pause</code>
     </div>
 
-    <div class="box">
-        <h3>3. Botão de Emergência (Reset)</h3>
+    <div class="box" style="border-left-color: #cf6679;">
+        <h3>PASSO 3: Botão de Emergência (Reset)</h3>
         <p>Volta as configurações ao padrão original do Windows.</p>
         <button onclick="copiarCodigo('codigoReset')">Copiar Script de Reset</button>
         <code id="codigoReset">@echo off
@@ -65,21 +80,21 @@ pause</code>
         if (matchRAM) {
             let ramGB = Math.round(parseInt(matchRAM[1]) / (1024 ** 3));
             if (ramGB >= 128) {
-                status.innerText = "🚀 " + ramGB + "GB de RAM? Você tá tentando rodar o quê? A NASA sabe disso?";
+                status.innerText = "🚀 " + ramGB + "GB de RAM? Você tá tentando simular o universo ou apenas abrir 3 abas do Chrome?";
             } else if (ramGB <= 4) {
                 status.innerText = "🐢 " + ramGB + "GB detectados. Vamos dar um fôlego para esse guerreiro!";
             } else {
                 status.innerText = "✅ " + ramGB + "GB de RAM identificados. Pronto para o boost!";
             }
         } else {
-            status.innerText = "❌ Formato inválido. Use o Scanner oficial.";
+            status.innerText = "❌ Formato inválido. Use o Scanner oficial acima.";
         }
     }
 
     function copiarCodigo(id) {
         let codigo = document.getElementById(id).innerText;
         navigator.clipboard.writeText(codigo);
-        alert("Código copiado! Agora é só colar no Bloco de Notas e salvar como .bat");
+        alert("Código copiado! Agora cole no Bloco de Notas e salve como .bat");
     }
 </script>
 
